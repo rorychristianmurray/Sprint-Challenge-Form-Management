@@ -6,18 +6,19 @@ const DataList = ({ history }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = JSON.parse(localStorage.getItem("token"));
     const url = "http://localhost:5000/api/restricted/data";
 
     if (token) {
       axios
         .get(url, {
           headers: {
-            Authorization: `${token}`
+            Authorization: token
           }
         })
         .then(response => {
           console.log("GET response", response);
+          localStorage.setItem("token", response.data.token);
           setData(response.data);
         })
         .catch(error => {

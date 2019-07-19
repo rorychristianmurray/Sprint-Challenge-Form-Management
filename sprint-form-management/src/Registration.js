@@ -53,14 +53,15 @@ export default withFormik({
       .required()
   }),
 
-  handleSubmit(values) {
+  handleSubmit(values, formikBag) {
     console.log("handleSubmit values", values);
+    console.log("handleSubmit formikBag", formikBag);
     const url = "http://localhost:5000/api/register";
     axios
       .post(url, values)
       .then(response => {
         console.log("handleSubmit response", response);
-        localStorage.setItem("token", response.data.token);
+        formikBag.props.setToken(response.data.token);
       })
       .catch(error => {
         console.log("handleSubmit error", error);
