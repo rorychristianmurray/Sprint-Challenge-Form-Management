@@ -2,9 +2,14 @@ import React from "react";
 import { withFormik, Form, Field, ErrorMessage, yupToFormErrors } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
+import { Redirect } from "react-router-dom";
 
 const Registration = ({ touched, errors }) => {
-  //   const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    return <Redirect to="/data" />;
+  }
 
   return (
     <Form className="login-form">

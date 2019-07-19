@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Data from "./Data";
 
-const DataList = () => {
+const DataList = ({ history }) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const url = "http://localhost:5000/api/restricted/data";
+
+    if (token) {
+      axios
+        .get(url, {
+          headers: {
+            Authorization: `${token}`
+          }
+        })
+        .then(response => {
+          console.log("GET response", response);
+          setData(response.data);
+        })
+        .catch(error => {
+          console.log("GET error", error);
+          localStorage.removeItem("token");
+          history.push("/");
+        });
+    }
+  }, [history]);
+
+  console.log("DataList data", data);
   return (
-    <div>
-      <div>Data list incoming</div>
+    <div className="data-list">
+      {data.map(data => {
+        return <Data data={data} key={data.name} />;
+      })}
     </div>
   );
 };
